@@ -12,17 +12,13 @@ BUCKET_NAME = os.environ["BUCKET_NAME"]
 TABLE_NAME = os.environ["TABLE_NAME"]
 
 def lambda_handler(event, context):
-    # API Gateway delivers body as base64 by default if binary
     body = base64.b64decode(event["body"])
     
-    # Generate unique file name
     image_id = str(uuid.uuid4())
     key = f"original/{image_id}.jpg"
 
-    # Upload to S3
     s3.put_object(Bucket=BUCKET_NAME, Key=key, Body=body)
 
-    # Save metadata in DynamoDB
     table = dynamodb.Table(TABLE_NAME)
     table.put_item(Item={
         "image_id": image_id,
