@@ -42,3 +42,6 @@ terraform.rc
 # Mac/Linux temp files
 *.tmp
 *~
+
+lambda/process/*
+!lambda/process/*.py
