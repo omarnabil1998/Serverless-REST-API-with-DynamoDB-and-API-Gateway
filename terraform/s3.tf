@@ -1,5 +1,7 @@
+data "aws_caller_identity" "current" {}
+
 resource "aws_s3_bucket" "images" {
-  bucket = "${var.project_name}-images"
+  bucket = "${var.project_name}-images-${data.aws_caller_identity.current.account_id}"
 }
 
 resource "aws_s3_bucket_public_access_block" "images" {

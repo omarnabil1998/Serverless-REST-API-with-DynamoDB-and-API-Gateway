@@ -26,7 +26,7 @@ resource "aws_iam_role_policy" "upload_lambda_policy" {
       {
         Effect   = "Allow"
         Action   = ["dynamodb:PutItem"]
-        Resource = aws_dynamodb_table.metadata.arn
+        Resource = aws_dynamodb_table.image_metadata.arn
       },
       {
         Effect   = "Allow"
@@ -70,7 +70,7 @@ resource "aws_iam_role_policy" "processor_lambda_policy" {
       {
         Effect   = "Allow"
         Action   = ["dynamodb:PutItem"]
-        Resource = aws_dynamodb_table.metadata.arn
+        Resource = aws_dynamodb_table.image_metadata.arn
       },
       {
         Effect   = "Allow"
@@ -84,16 +84,16 @@ resource "aws_iam_role_policy" "processor_lambda_policy" {
 resource "aws_lambda_function" "upload" {
   function_name = "${var.project_name}-upload"
   role          = aws_iam_role.upload_lambda_role.arn
-  handler       = "upload.handler"
-  runtime       = "python3.10"
+  handler       = "upload_lambda.lambda_handler"
+  runtime       = "python3.12"
 
-  filename         = "${path.module}/lambdas/upload.zip"
-  source_code_hash = filebase64sha256("${path.module}/lambdas/upload.zip")
+  filename         = archive_file.upload_lambda_zip.output_path
+  source_code_hash = archive_file.upload_lambda_zip.output_base64sha256
 
   environment {
     variables = {
       BUCKET_NAME = aws_s3_bucket.images.bucket
-      TABLE_NAME      = aws_dynamodb_table.image_metadata.name
+      TABLE_NAME  = aws_dynamodb_table.image_metadata.name
     }
   }
 }
@@ -101,18 +101,30 @@ resource "aws_lambda_function" "upload" {
 resource "aws_lambda_function" "processor" {
   function_name = "${var.project_name}-processor"
   role          = aws_iam_role.processor_lambda_role.arn
-  handler       = "processor.handler"
-  runtime       = "python3.10"
+  handler       = "process_lambda.lambda_handler"
+  runtime       = "python3.12"
 
-  filename         = "${path.module}/lambdas/processor.zip"
-  source_code_hash = filebase64sha256("${path.module}/lambdas/processor.zip")
+  filename         = archive_file.process_lambda_zip.output_path
+  source_code_hash = archive_file.process_lambda_zip.output_base64sha256
 
   environment {
     variables = {
       BUCKET_NAME = aws_s3_bucket.images.bucket
-      TABLE_NAME      = aws_dynamodb_table.image_metadata.name
+      TABLE_NAME  = aws_dynamodb_table.image_metadata.name
     }
   }
+}
+
+resource "archive_file" "upload_lambda_zip" {
+  type        = "zip"
+  source_file = "${path.module}/../lambda/upload_lambda.py"
+  output_path = "${path.module}/../lambda/upload_lambda.zip"
+}
+
+resource "archive_file" "process_lambda_zip" {
+  type        = "zip"
+  source_dir  = "${path.module}/../lambda/process/"
+  output_path = "${path.module}/../lambda/process_lambda.zip"
 }
 
 resource "aws_s3_bucket_notification" "originals_notify" {

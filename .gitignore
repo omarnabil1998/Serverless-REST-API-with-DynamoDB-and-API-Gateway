@@ -1,0 +1,44 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+.venv/
+env/
+venv/
+.Python
+pip-log.txt
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
+
+# IDEs / Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Zip packages for Lambda
+*.zip
+
+# Logs
+*.log
+
+# Mac/Linux temp files
+*.tmp
+*~
