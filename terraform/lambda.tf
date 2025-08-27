@@ -69,7 +69,7 @@ resource "aws_iam_role_policy" "processor_lambda_policy" {
       },
       {
         Effect   = "Allow"
-        Action   = ["dynamodb:PutItem"]
+        Action   = ["dynamodb:PutItem","dynamodb:UpdateItem"]
         Resource = aws_dynamodb_table.image_metadata.arn
       },
       {
