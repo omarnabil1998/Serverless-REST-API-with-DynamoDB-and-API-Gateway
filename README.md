@@ -18,6 +18,9 @@ This project demonstrates a **serverless** architecture for uploading and proces
 
 ![Architecture](./Architecture.png)  
 
+## Demo Video
+[Watch the project demo](https://drive.google.com/file/d/131Fyjje7IaSVtZQbAodictnri4E3HCHV/view?usp=sharing)
+
 ## 🛠️ Setup & Deployment
 
 ### Prerequisites
