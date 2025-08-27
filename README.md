@@ -30,7 +30,7 @@ This project demonstrates a **serverless** architecture for uploading and proces
 ### Deployment
 ```bash
 # Clone the repo
-git clone https://github.com/omarnabil1998/Serverless-REST-API-with-DynamoDB-and-API-Gateway.git
+git clone https://github.com/omarnabil1998/Serverless-Image-Processing-with-S3-and-Lambda.git
 cd image-processing-aws
 
 # Package process Lambdas with pillow dependency
